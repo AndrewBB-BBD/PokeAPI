@@ -6,11 +6,14 @@ import com.pokedex.pokeAPI.repositories.PokemonRepository;
 import com.pokedex.pokeAPI.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import com.pokedex.pokeAPI.exception.ResourceNotFoundException;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.*;
 import org.springframework.util.ResourceUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,4 +65,29 @@ public class Hello {
     public Pokemon createPokemon(@RequestBody Pokemon pokemon) {
         return pokemonRepository.save(pokemon);
     }
+
+    @GetMapping("/pokemon/{id}")
+    public ResponseEntity<Pokemon> updatePokemon(
+            @PathVariable(value = "id") Long id, @RequestBody Pokemon pokemonDetails)
+            throws ResourceNotFoundException {
+
+        Pokemon pokemon =
+                pokemonRepository
+                        .findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Pokemon", "id", id));
+
+        System.out.println(id);
+        System.out.println(pokemon.getId());
+        pokemon.setIdentifier(pokemonDetails.getIdentifier());
+        pokemon.setSpecies_id(pokemonDetails.getSpecies_id());
+        pokemon.setHeight(pokemonDetails.getHeight());
+        pokemon.setWeight(pokemonDetails.getWeight());
+        pokemon.setBase_experience(pokemonDetails.getBase_experience());
+        pokemon.setOrder(pokemonDetails.getOrder());
+        pokemon.setIs_default(pokemonDetails.getIs_default());
+
+        final Pokemon updatedPokemon = pokemonRepository.save(pokemon);
+        return ResponseEntity.ok(updatedPokemon);
+    }
+
 }
