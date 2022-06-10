@@ -1,17 +1,16 @@
 package com.pokedex.pokeAPI.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pokedex.pokeAPI.models.Pokemon;
+import com.pokedex.pokeAPI.repositories.PokemonRepository;
 import com.pokedex.pokeAPI.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +30,9 @@ public class Hello {
 
     @Autowired
     JwtUtil jwtUtil;
+
+    @Autowired
+    PokemonRepository pokemonRepository;
 
     @GetMapping("/login")
     public String firstPage(HttpServletResponse httpResponse) throws IOException {
@@ -54,5 +56,10 @@ public class Hello {
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
         httpHeaders.set("Content-Type", "audio/mp3");
         return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/pokemon")
+    public Pokemon createPokemon(@RequestBody Pokemon pokemon) {
+        return pokemonRepository.save(pokemon);
     }
 }
