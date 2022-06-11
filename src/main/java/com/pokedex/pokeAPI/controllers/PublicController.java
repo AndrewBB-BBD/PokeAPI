@@ -29,6 +29,12 @@ public class PublicController {
     @Value("${auth0.domain}")
     String domain;
 
+    @Value("${auth0.callbackDomain}")
+    private String callbackDomain;
+    
+    @Value("${app.port}")
+    private String port;
+
     @Autowired
     JwtUtil jwtUtil;
 
@@ -39,15 +45,15 @@ public class PublicController {
     S3BucketService s3BucketService;
 
 
-
     @ApiOperation(value = "Login endpoint", notes = "Log in endpoint which will redirect users to login with valid " +
             "credentials and upon login be redirected to the API's official documentation.")
     @GetMapping("/login")
     public void login(HttpServletResponse httpResponse) throws IOException, NoSuchFieldException, IllegalAccessException {
-
+        //use urlbuilder?
+        String callbackURL = String.format("http://%1$s:%2$s/swagger-ui.html", callbackDomain, port);
         String loginURL = urlBuilder.baseUrl(domain, "authorize")
                         .clientId(applicationId).responseType("code")
-                        .code_challenge_method("S256").redirect_uri("http://localhost:8080/swagger-ui.html")
+                        .code_challenge_method("S256").redirect_uri(callbackURL)
                         .scope("openid").code_challenge(jwtUtil.generateChallenge())
                         .build();
         System.out.println(loginURL);
