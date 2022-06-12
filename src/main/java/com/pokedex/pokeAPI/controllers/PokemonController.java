@@ -16,8 +16,12 @@ public class PokemonController {
     @Autowired
     PokemonRepository pokemonRepository;
 
-    //@GetMapping("/pokemon")
-    //public Pokemon createPokemon(@RequestBody Pokemon pokemon) {
-    //   return pokemonRepository.save(pokemon);
-    //}
+//    @PostMapping("/pokemon")
+//    public Pokemon createPokemon(@RequestBody Pokemon pokemon) {
+//       return pokemonRepository.save(pokemon);
+//    }
+    @PostMapping("/hello")
+    public String hello(@RequestParam String name) {
+       return "Hello, " + name;
+    }
 }
