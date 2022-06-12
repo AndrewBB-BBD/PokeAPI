@@ -31,7 +31,7 @@ public class PublicController {
     @Value("${auth0.application_id}")
     String applicationId;
 
-    @Value("${auth0.auth0Domain}")
+    @Value("${auth0.domain}")
     String auth0Domain;
 
     @Value("${app.port}")
@@ -53,14 +53,12 @@ public class PublicController {
             "credentials and upon login be redirected to the API's official documentation.")
     @GetMapping("/login")
     public void login(HttpServletResponse httpResponse) throws IOException, NoSuchFieldException, IllegalAccessException {
-        //use urlbuilder?
         String challenge = jwtUtil.generateChallenge();
-        String callbackURL = String.format("http://%1$s/swagger-ui.html", redirect_uri);
         String loginURL = urlBuilder.baseUrl(auth0Domain, "authorize")
-                        .clientId(applicationId).responseType("code")
-                        .code_challenge_method("S256").redirect_uri(callbackURL)
-                        .scope("openid").code_challenge(challenge)
-                        .state(challenge).build();
+                    .clientId(applicationId).responseType("code")
+                    .code_challenge_method("S256").redirect_uri(redirect_uri)
+                    .scope("openid").code_challenge(challenge)
+                    .state(challenge).build();
         httpResponse.sendRedirect(loginURL);
     }
 
