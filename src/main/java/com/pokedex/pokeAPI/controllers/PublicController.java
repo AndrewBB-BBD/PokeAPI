@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokedex.pokeAPI.Utilities.S3BucketService;
 import com.pokedex.pokeAPI.Utilities.URLBuilder;
 import com.pokedex.pokeAPI.models.AuthDetails;
-import com.pokedex.pokeAPI.models.UserDetials;
 import com.pokedex.pokeAPI.security.JwtUtil;
 
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/v1")
@@ -30,8 +31,14 @@ public class PublicController {
     @Value("${auth0.application_id}")
     String applicationId;
 
-    @Value("${auth0.domain}")
-    String domain;
+    @Value("${auth0.auth0Domain}")
+    String auth0Domain;
+
+    @Value("${app.port}")
+    private String port;
+
+    @Value("${app.redirect_uri}")
+    String redirect_uri;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -42,32 +49,30 @@ public class PublicController {
     @Autowired
     S3BucketService s3BucketService;
 
-    @Value("${app.redirect_uri}")
-    String redirect_uri;
-
     @ApiOperation(value = "Login endpoint", notes = "Log in endpoint which will redirect users to login with valid " +
             "credentials and upon login be redirected to the API's official documentation.")
     @GetMapping("/login")
     public void login(HttpServletResponse httpResponse) throws IOException, NoSuchFieldException, IllegalAccessException {
+        //use urlbuilder?
         String challenge = jwtUtil.generateChallenge();
-        String loginURL = urlBuilder.baseUrl(domain, "authorize")
+        String callbackURL = String.format("http://%1$s/swagger-ui.html", redirect_uri);
+        String loginURL = urlBuilder.baseUrl(auth0Domain, "authorize")
                         .clientId(applicationId).responseType("code")
-                        .code_challenge_method("S256").redirect_uri(redirect_uri)
+                        .code_challenge_method("S256").redirect_uri(callbackURL)
                         .scope("openid").code_challenge(challenge)
-                        .state(challenge)
-                        .build();
+                        .state(challenge).build();
         httpResponse.sendRedirect(loginURL);
     }
 
     @ApiOperation(value = "Pokemon theme song", notes = "Fun end point which plays the original Pokemon theme song.")
     @GetMapping(value = "/sound")
-    public ResponseEntity playPokemonThemeSong() throws FileNotFoundException {
+    public ResponseEntity<InputStreamResource> playPokemonThemeSong() throws FileNotFoundException {
         InputStream audioString = s3BucketService.test("sound_clips/Pokemon.mp3");
         InputStreamResource inputStreamResource = new InputStreamResource(audioString);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
         httpHeaders.set("Content-Type", "audio/mp3");
-        return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get ID token", notes = "Easily get you id_token for accessing all endpoints.")

@@ -1,6 +1,6 @@
 package com.pokedex.pokeAPI.Utilities;
 
-import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,9 @@ import java.io.InputStream;
 
 @Service
 public class S3BucketService {
+    //spring cloud built in
     @Autowired
-    private AmazonS3 amazonS3Client;
+    private AmazonS3Client amazonS3Client;
 
     @Value("${s3Bucket.bucketName}")
     private String bucketName;
