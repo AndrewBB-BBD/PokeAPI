@@ -1,5 +1,6 @@
 package com.pokedex.pokeAPI.controllers;
 
+import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokedex.pokeAPI.Utilities.S3BucketService;
 import com.pokedex.pokeAPI.Utilities.URLBuilder;
@@ -62,17 +63,7 @@ public class PublicController {
         httpResponse.sendRedirect(loginURL);
     }
 
-    @ApiOperation(value = "Pokemon theme song", notes = "Fun end point which plays the original Pokemon theme song.")
-    @GetMapping(value = "/sound")
-    public ResponseEntity<InputStreamResource> playPokemonThemeSong() throws FileNotFoundException {
-        InputStream audioString = s3BucketService.test("sound_clips/Pokemon.mp3");
-        InputStreamResource inputStreamResource = new InputStreamResource(audioString);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
-        httpHeaders.set("Content-Type", "audio/mp3");
-        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
-    }
-
+    
     @ApiOperation(value = "Get ID token", notes = "Easily get you id_token for accessing all endpoints.")
     @GetMapping(value = "/getToken")
     public ResponseEntity<AuthDetails> getToken(@RequestParam String code, @RequestParam String state) throws IOException {
@@ -93,5 +84,28 @@ public class PublicController {
         ObjectMapper mapper = new ObjectMapper();
         AuthDetails authDetails = mapper.readValue(response.getBody(), AuthDetails.class);
         return new ResponseEntity<>(authDetails, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Pokemon theme song", notes = "Fun end point which plays the original Pokemon theme song.")
+    @GetMapping(value = "/sound")
+    public ResponseEntity<InputStreamResource> playPokemonThemeSong() throws FileNotFoundException {
+        InputStream audioString = s3BucketService.getS3Resource("sound_clips/Pokemon.mp3");
+        InputStreamResource inputStreamResource = new InputStreamResource(audioString);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
+        httpHeaders.set("Content-Type", "audio/mp3");
+        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/image")
+    public ResponseEntity<byte[]> getImageAsResponseEntity(@RequestParam int imageID) throws IOException {
+    HttpHeaders headers = new HttpHeaders();
+    InputStream in = s3BucketService.getS3Resource("images/" + imageID + ".png");
+    byte[] media = IOUtils.toByteArray(in);
+    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+    headers.set("Content-Type", "image/png");
+
+    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+    return responseEntity;
     }
 }

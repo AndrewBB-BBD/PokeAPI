@@ -2,7 +2,7 @@ package com.pokedex.pokeAPI.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserDetials {
+public class UserDetails {
     private String issuer;
     private String username;
     private String audience;

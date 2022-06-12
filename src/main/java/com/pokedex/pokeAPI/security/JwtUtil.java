@@ -2,7 +2,7 @@ package com.pokedex.pokeAPI.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pokedex.pokeAPI.models.UserDetials;
+import com.pokedex.pokeAPI.models.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -15,7 +15,7 @@ public class JwtUtil {
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String payload = new String(decoder.decode(chunks[1]));
         ObjectMapper mapper = new ObjectMapper();
-        UserDetials user = mapper.readValue(payload, UserDetials.class);
+        UserDetails user = mapper.readValue(payload, UserDetails.class);
         return user.getUsername();
     }
 
