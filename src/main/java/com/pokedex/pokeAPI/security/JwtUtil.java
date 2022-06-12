@@ -13,9 +13,7 @@ public class JwtUtil {
     public String decodeUsername(String token) throws JsonProcessingException {
         String[] chunks = token.split(" ")[1].split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
-
         String payload = new String(decoder.decode(chunks[1]));
-        System.out.println(payload);
         ObjectMapper mapper = new ObjectMapper();
         UserDetials user = mapper.readValue(payload, UserDetials.class);
         return user.getUsername();
