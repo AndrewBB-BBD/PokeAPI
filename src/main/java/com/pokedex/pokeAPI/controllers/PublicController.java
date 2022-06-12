@@ -1,24 +1,29 @@
 package com.pokedex.pokeAPI.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokedex.pokeAPI.Utilities.S3BucketService;
 import com.pokedex.pokeAPI.Utilities.URLBuilder;
+import com.pokedex.pokeAPI.models.AuthDetails;
 import com.pokedex.pokeAPI.security.JwtUtil;
+
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/v1")
@@ -27,13 +32,13 @@ public class PublicController {
     String applicationId;
 
     @Value("${auth0.domain}")
-    String domain;
+    String auth0Domain;
 
-    @Value("${auth0.callbackDomain}")
-    private String callbackDomain;
-    
     @Value("${app.port}")
     private String port;
+
+    @Value("${app.redirect_uri}")
+    String redirect_uri;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -44,30 +49,49 @@ public class PublicController {
     @Autowired
     S3BucketService s3BucketService;
 
-
     @ApiOperation(value = "Login endpoint", notes = "Log in endpoint which will redirect users to login with valid " +
             "credentials and upon login be redirected to the API's official documentation.")
     @GetMapping("/login")
     public void login(HttpServletResponse httpResponse) throws IOException, NoSuchFieldException, IllegalAccessException {
-        //use urlbuilder?
-        String callbackURL = String.format("http://%1$s:%2$s/swagger-ui.html", callbackDomain, port);
-        String loginURL = urlBuilder.baseUrl(domain, "authorize")
-                        .clientId(applicationId).responseType("code")
-                        .code_challenge_method("S256").redirect_uri(callbackURL)
-                        .scope("openid").code_challenge(jwtUtil.generateChallenge())
-                        .build();
-        System.out.println(loginURL);
+        String challenge = jwtUtil.generateChallenge();
+        String loginURL = urlBuilder.baseUrl(auth0Domain, "authorize")
+                    .clientId(applicationId).responseType("code")
+                    .code_challenge_method("S256").redirect_uri(redirect_uri)
+                    .scope("openid").code_challenge(challenge)
+                    .state(challenge).build();
         httpResponse.sendRedirect(loginURL);
     }
 
     @ApiOperation(value = "Pokemon theme song", notes = "Fun end point which plays the original Pokemon theme song.")
     @GetMapping(value = "/sound")
-    public ResponseEntity playPokemonThemeSong() throws FileNotFoundException {
+    public ResponseEntity<InputStreamResource> playPokemonThemeSong() throws FileNotFoundException {
         InputStream audioString = s3BucketService.test("sound_clips/Pokemon.mp3");
         InputStreamResource inputStreamResource = new InputStreamResource(audioString);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
         httpHeaders.set("Content-Type", "audio/mp3");
-        return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get ID token", notes = "Easily get you id_token for accessing all endpoints.")
+    @GetMapping(value = "/getToken")
+    public ResponseEntity<AuthDetails> getToken(@RequestParam String code, @RequestParam String state) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("code", code);
+        map.add("code_verifier", state);
+        map.add("client_id", applicationId);
+        map.add("redirect_uri", redirect_uri);
+        map.add("grant_type", "authorization_code");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange("https://dev-omuu4lwn.us.auth0.com/oauth/token", HttpMethod.POST, request, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        AuthDetails authDetails = mapper.readValue(response.getBody(), AuthDetails.class);
+        return new ResponseEntity<>(authDetails, HttpStatus.OK);
     }
 }
