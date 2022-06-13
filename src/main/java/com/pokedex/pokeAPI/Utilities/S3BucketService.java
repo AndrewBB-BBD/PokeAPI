@@ -18,7 +18,7 @@ public class S3BucketService {
     @Value("${s3Bucket.bucketName}")
     private String bucketName;
 
-    public InputStream test(String fileName) {
+    public InputStream getS3Resource(String fileName) {
         S3Object s3object = amazonS3Client.getObject(new GetObjectRequest(bucketName, fileName));
         return s3object.getObjectContent();
     }
