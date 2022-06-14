@@ -1,12 +1,11 @@
 package com.pokedex.pokeAPI.models;
 
 import lombok.Data;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
 @Data
-@Table(name = "pokemon2")
+@Table(name = "pokemon_z")
 @Entity
 
 public class Pokemon {
@@ -16,18 +15,18 @@ public class Pokemon {
 
     private String identifier;
 
-    private int species_id;
+    private Integer species_id;
 
-    private int height;
+    private Integer height;
 
-    private int weight;
+    private Integer weight;
 
-    private int base_experience;
+    private Integer base_experience;
 
     @Column(name="`order`")
-    private int order;
+    private Integer order;
 
-    private int is_default;
+    private Integer is_default;
 
 
 
