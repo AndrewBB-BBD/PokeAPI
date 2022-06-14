@@ -14,14 +14,18 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.Id;
 
+import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @Entity()
 @Table(name = "pokemon_species")
-public class PokemonSpeciesData {
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+public class PokemonSpeciesData implements Serializable{
 
     @Id 
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -66,9 +70,7 @@ public class PokemonSpeciesData {
     private Integer conquest_order;
 
 
-    @OneToMany(mappedBy = "pokemon_species",
-               orphanRemoval = true,
-               fetch = FetchType.LAZY,
-               cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pokemon_species")
+    @JsonIgnore
     private List<PokemonData> basePokemon;
 }

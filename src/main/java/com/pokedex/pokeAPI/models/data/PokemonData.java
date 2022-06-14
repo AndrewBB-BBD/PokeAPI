@@ -10,10 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
+
+import java.io.Serializable;
 
 @Data
 @Entity
+
 @Table(name = "pokemon")
 public class PokemonData {
 
