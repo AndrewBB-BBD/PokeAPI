@@ -1,10 +1,7 @@
 package com.pokedex.pokeAPI.models.data;
 
 import javax.persistence.*;
-
 import lombok.Data;
-
-import java.io.Serializable;
 
 @Data
 @Entity

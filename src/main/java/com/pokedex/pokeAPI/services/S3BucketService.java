@@ -6,12 +6,10 @@ import com.amazonaws.services.s3.model.S3Object;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.io.InputStream;
 
 @Service
 public class S3BucketService {
-    //spring cloud built in
     @Autowired
     private AmazonS3Client amazonS3Client;
 

@@ -3,14 +3,10 @@ package com.pokedex.pokeAPI.services;
 import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 import com.pokedex.pokeAPI.repositories.PokemonRepository;
 import com.pokedex.pokeAPI.repositories.PokemonSpeciesRepository;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import com.pokedex.pokeAPI.models.data.PokemonData;
-import com.pokedex.pokeAPI.models.data.PokemonSpeciesData;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +47,5 @@ public class EvolutionService {
 
         log.info("Response from {} request was: {}", pokemonIdentifier, ret.toString());
         return ret;
-       
-        //CANT DO STREAM CUS I NEED NUMBERS
-        //.flatMap(ps -> ps.getBasePokemon().stream()).map(p -> new ResponseEvolutionPokemon(p.getIdentifier(), rootChain, chainPosition)).Collect(Collectors.toList());
-    }
+     }
 }

@@ -1,7 +1,6 @@
 package com.pokedex.pokeAPI.models;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
