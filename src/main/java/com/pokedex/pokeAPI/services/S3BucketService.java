@@ -1,4 +1,4 @@
-package com.pokedex.pokeAPI.Utilities;
+package com.pokedex.pokeAPI.services;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.GetObjectRequest;
