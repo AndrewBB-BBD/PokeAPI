@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
