@@ -25,7 +25,7 @@ import lombok.Data;
 @Entity()
 @Table(name = "pokemon_species")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class PokemonSpeciesData implements Serializable {
+public class PokemonSpeciesData implements Serializable{
 
     @Id 
     @GeneratedValue(strategy=GenerationType.AUTO)
