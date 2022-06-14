@@ -12,14 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -43,13 +45,24 @@ public class GetPokemon {
     PokemonRepositoryByType typerepo;
 
     @GetMapping(value = "/pokemonById/")
-    @ApiOperation(value = "View a pokemon")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved Pokemon", responseContainer = "List", response = PokemonData.class),
-            @ApiResponse(code = 401, message = "You are not authorized to view this Pokemon"),
-            @ApiResponse(code = 403, message = "Accessing the Pokemon you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "This pokemon was not found")
-        }
+    @Operation(
+            summary = "View a pokemon",
+            description = "View a pokemon",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved Evolution Line",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = PokemonData.class))
+                                    )
+                            }
+                    ),
+                    @ApiResponse(responseCode  = "401", description  = "You are not authorized to view this Pokemon"),
+                    @ApiResponse(responseCode  = "403", description  = "Accessing this Pokemon you were trying to reach is forbidden"),
+                    @ApiResponse(responseCode  = "404", description  = "This pokemon was not found")
+            }
     )
     public ResponseEntity<?> GetPokemonBy(@RequestParam int id){
         System.out.println(id);
@@ -62,13 +75,24 @@ public class GetPokemon {
 
 
     @GetMapping(value = "/pokemonByIdentifier/")
-    @ApiOperation(value = "View a pokemon")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved Pokemon", responseContainer = "List", response = PokemonData.class),
-            @ApiResponse(code = 401, message = "You are not authorized to view this Pokemon"),
-            @ApiResponse(code = 403, message = "Accessing the Pokemon you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "This pokemon was not found")
-        }
+    @Operation(
+            summary = "View a pokemon",
+            description = "View a pokemon",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved Pokemon",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = PokemonData.class))
+                                    )
+                            }
+                    ),
+                    @ApiResponse(responseCode  = "401", description  = "You are not authorized to view this Pokemon"),
+                    @ApiResponse(responseCode  = "403", description  = "Accessing this Pokemon you were trying to reach is forbidden"),
+                    @ApiResponse(responseCode  = "404", description  = "This pokemon was not found")
+            }
     )
     public ResponseEntity<?> GetPokemonBy(@RequestParam String identifier){
     	if(pokemonrepository.findByidentifier(identifier).size() != 0) {
@@ -80,13 +104,24 @@ public class GetPokemon {
     }
     
     @GetMapping(value = "/pokemonByType/")
-    @ApiOperation(value = "View a pokemon")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved Pokemon by type", responseContainer = "List", response = PokemonType.class),
-            @ApiResponse(code = 401, message = "You are not authorized to view this Pokemon"),
-            @ApiResponse(code = 403, message = "Accessing the Pokemon you were trying to reach is forbidden"),
-            @ApiResponse(code = 404, message = "This pokemon was not found")
-        }
+    @Operation(
+            summary = "View pokemon by type",
+            description = "View pokemon by type",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved Pokemon",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = PokemonType.class))
+                                    )
+                            }
+                    ),
+                    @ApiResponse(responseCode  = "401", description  = "You are not authorized to view this Evolution Line"),
+                    @ApiResponse(responseCode  = "403", description  = "Accessing this Evolution Line you were trying to reach is forbidden"),
+                    @ApiResponse(responseCode  = "404", description  = "This pokemon was not found")
+            }
     )
     public ResponseEntity<?> GetPokemonByType(@RequestParam String ptype){
     	if(typerepo.findByptype(ptype).size() != 0) {
