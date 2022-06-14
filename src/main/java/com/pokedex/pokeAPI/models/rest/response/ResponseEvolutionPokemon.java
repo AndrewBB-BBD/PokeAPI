@@ -18,4 +18,10 @@ public class ResponseEvolutionPokemon {
 
     @ApiModelProperty(notes = "The pokemon's postion in the chain. Starts with 0.\nNOTE: There can be multiple pokemon on the same 'rung' of the chain", name = "Pokemon Chain Position", position = 3, example = "1")
     private final Integer chainPosition;
+
+    public ResponseEvolutionPokemon(String pokemonIdentifier, Integer chainPosition) {
+        this.pokemonIdentifier = pokemonIdentifier;
+        this.rootChain = chainPosition == 0;
+        this.chainPosition = chainPosition; 
+    }
 }
