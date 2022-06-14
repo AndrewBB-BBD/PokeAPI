@@ -10,20 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
-
-import java.io.Serializable;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
-
-@Table(name = "pokemon")
+@Table(name = "pokemon_z")
+@AllArgsConstructor
+@ToString
+@NoArgsConstructor
 public class PokemonData {
 
     @Id 
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer id;
 
@@ -43,9 +44,19 @@ public class PokemonData {
     @Column(nullable = false)
     private Integer base_experience;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="`order`" )
     private Integer order;
 
     @Column(nullable = false)
     private Boolean is_default;
+
+    public PokemonData(String identifier, PokemonSpeciesData pokemon_species, Integer height, Integer weight, Integer base_experience, Integer order, Boolean is_default) {
+        this.identifier = identifier;
+        this.pokemon_species = pokemon_species;
+        this.height = height;
+        this.weight = weight;
+        this.base_experience = base_experience;
+        this.order = order;
+        this.is_default = is_default;
+    }
 }

@@ -70,7 +70,17 @@ public class PokemonSpeciesData implements Serializable{
     private Integer conquest_order;
 
 
-    @OneToMany(mappedBy = "pokemon_species")
+    @OneToMany(mappedBy = "pokemon_species",
+               orphanRemoval = true,
+               fetch = FetchType.LAZY,
+               cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PokemonData> basePokemon;
+
+    @Override
+    public String toString() {
+        return "PokemonSpeciesData{" +
+                "identifier='" + identifier + '\'' +
+                '}';
+    }
 }
