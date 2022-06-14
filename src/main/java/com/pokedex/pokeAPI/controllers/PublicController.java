@@ -7,7 +7,7 @@ import com.pokedex.pokeAPI.Utilities.URLBuilder;
 import com.pokedex.pokeAPI.models.AuthDetails;
 import com.pokedex.pokeAPI.security.JwtUtil;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -50,7 +50,7 @@ public class PublicController {
     @Autowired
     S3BucketService s3BucketService;
 
-    @ApiOperation(value = "Login endpoint", notes = "Log in endpoint which will redirect users to login with valid " +
+    @Operation(summary = "Login endpoint", description = "Log in endpoint which will redirect users to login with valid " +
             "credentials and upon login be redirected to the API's official documentation.")
     @GetMapping("/login")
     public void login(HttpServletResponse httpResponse) throws IOException, NoSuchFieldException, IllegalAccessException {
@@ -64,7 +64,7 @@ public class PublicController {
     }
 
     
-    @ApiOperation(value = "Get ID token", notes = "Easily get you id_token for accessing all endpoints.")
+    @Operation(summary = "Get ID token", description = "Easily get you id_token for accessing all endpoints.")
     @GetMapping(value = "/getToken")
     public ResponseEntity<AuthDetails> getToken(@RequestParam String code, @RequestParam String state) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -86,7 +86,7 @@ public class PublicController {
         return new ResponseEntity<>(authDetails, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Pokemon theme song", notes = "Fun end point which plays the original Pokemon theme song.")
+    @Operation(summary = "Pokemon theme song", description = "Fun end point which plays the original Pokemon theme song.")
     @GetMapping(value = "/sound")
     public ResponseEntity<InputStreamResource> playPokemonThemeSong() throws FileNotFoundException {
         InputStream audioString = s3BucketService.getS3Resource("sound_clips/Pokemon.mp3");
