@@ -3,15 +3,12 @@ package com.pokedex.pokeAPI.controllers;
 import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 import com.pokedex.pokeAPI.services.EvolutionService;
 import com.pokedex.pokeAPI.security.JwtUtil;
-
 import java.util.List;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,19 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.ui.Model;
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import java.lang.invoke.MethodHandles;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/v1")
 public class EvolutionController {
-    //private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()); // as per documentation https://www.slf4j.org/faq.html#declared_static
-
     @Autowired
     JwtUtil jwtUtil;
 

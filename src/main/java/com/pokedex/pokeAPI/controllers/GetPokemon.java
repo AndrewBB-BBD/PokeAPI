@@ -2,16 +2,9 @@ package com.pokedex.pokeAPI.controllers;
 
 import com.pokedex.pokeAPI.models.data.PokemonData;
 import com.pokedex.pokeAPI.models.data.PokemonType;
-import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 import com.pokedex.pokeAPI.repositories.PokemonRepository;
 import com.pokedex.pokeAPI.repositories.PokemonRepositoryByType;
-import com.pokedex.pokeAPI.services.EvolutionService;
 import com.pokedex.pokeAPI.security.JwtUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,21 +13,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
-
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import java.lang.invoke.MethodHandles;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/v1")
 public class GetPokemon {
-    //private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()); // as per documentation https://www.slf4j.org/faq.html#declared_static
-
     @Autowired
     JwtUtil jwtUtil;
 
@@ -64,6 +48,7 @@ public class GetPokemon {
                     @ApiResponse(responseCode  = "404", description  = "This pokemon was not found")
             }
     )
+
     public ResponseEntity<?> GetPokemonBy(@RequestParam int id){
         System.out.println(id);
     	if(pokemonrepository.findByid(id).size()!= 0) {
@@ -72,7 +57,6 @@ public class GetPokemon {
                 return ResponseEntity.notFound().build();
             }
     	}
-
 
     @GetMapping(value = "/pokemonByIdentifier/")
     @Operation(
@@ -131,10 +115,4 @@ public class GetPokemon {
     		return ResponseEntity.notFound().build();
     	}
     }
-    
-    
-    
-    
-    
-
 }

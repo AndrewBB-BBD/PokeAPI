@@ -1,13 +1,10 @@
 package com.pokedex.pokeAPI.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.pokedex.pokeAPI.models.AuthDetails;
 import com.pokedex.pokeAPI.models.Pokemon;
 import com.pokedex.pokeAPI.models.TamePokemon;
-import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 import com.pokedex.pokeAPI.repositories.TrainerRepository;
 import com.pokedex.pokeAPI.security.JwtUtil;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,13 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1")
 public class PokemonTrainerController {
-
     @Autowired
     JwtUtil jwtUtil;
 
@@ -47,6 +42,7 @@ public class PokemonTrainerController {
                     @ApiResponse(responseCode = "404", description = "Endpoint not found")
             }
     )
+
     @PutMapping("/uploadPokemonCaught")
     public ResponseEntity<String> uploadPokemonCaught(@RequestHeader String authorization, @RequestBody Pokemon pokemon,
                                                       @RequestParam String nickname) throws JsonProcessingException {
@@ -77,6 +73,7 @@ public class PokemonTrainerController {
                     @ApiResponse(responseCode = "404", description = "Endpoint not found")
             }
     )
+
     @PostMapping("/getMyPokemon")
     public ResponseEntity<Object> getMyPokemon(@RequestHeader String authorization,
                                                @RequestParam Optional<String> pokemonName) throws JsonProcessingException {

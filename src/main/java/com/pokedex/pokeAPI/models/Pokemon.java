@@ -1,7 +1,6 @@
 package com.pokedex.pokeAPI.models;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
@@ -27,7 +26,4 @@ public class Pokemon {
     private Integer order;
 
     private Integer is_default;
-
-
-
 }

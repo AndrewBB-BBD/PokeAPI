@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokedex.pokeAPI.models.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.SecureRandom;
 import java.util.Base64;
 
