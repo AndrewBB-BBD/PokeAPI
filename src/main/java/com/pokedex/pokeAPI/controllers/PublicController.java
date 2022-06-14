@@ -2,7 +2,7 @@ package com.pokedex.pokeAPI.controllers;
 
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pokedex.pokeAPI.Utilities.S3BucketService;
+import com.pokedex.pokeAPI.services.S3BucketService;
 import com.pokedex.pokeAPI.Utilities.URLBuilder;
 import com.pokedex.pokeAPI.models.AuthDetails;
 import com.pokedex.pokeAPI.security.JwtUtil;

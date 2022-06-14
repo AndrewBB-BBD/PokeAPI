@@ -28,7 +28,6 @@ public class PokemonTrainerController {
     public ResponseEntity<Object> uploadPokemonCaught(@RequestHeader String authorization, @RequestBody Pokemon pokemon,
                                                       @RequestParam String nickname) throws JsonProcessingException {
         String user = jwtUtil.decodeUsername(authorization);
-        System.out.println("User: " + user);
         TamePokemon tamePokemon = new TamePokemon(user, nickname, pokemon);
         try {
             trainerRepository.save(tamePokemon);
