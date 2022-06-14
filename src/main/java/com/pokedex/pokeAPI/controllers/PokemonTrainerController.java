@@ -5,7 +5,8 @@ import com.pokedex.pokeAPI.models.Pokemon;
 import com.pokedex.pokeAPI.models.TamePokemon;
 import com.pokedex.pokeAPI.repositories.TrainerRepository;
 import com.pokedex.pokeAPI.security.JwtUtil;
-import io.swagger.annotations.ApiOperation;
+
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class PokemonTrainerController {
     @Autowired
     TrainerRepository trainerRepository;
 
-    @ApiOperation(value = "Upload new pokemon you caught", notes = "Caught a new pokemon? Save it to your user profile!")
+    @Operation(summary = "Upload new pokemon you caught", description = "Caught a new pokemon? Save it to your user profile!")
     @PutMapping("/uploadPokemonCaught")
     public ResponseEntity<Object> uploadPokemonCaught(@RequestHeader String authorization, @RequestBody Pokemon pokemon,
                                                       @RequestParam String nickname) throws JsonProcessingException {
@@ -37,7 +38,7 @@ public class PokemonTrainerController {
         }
     }
 
-    @ApiOperation(value = "Get your pokemon/best-friend", notes = "Get all your pokemon or an individual " +
+    @Operation(summary = "Get your pokemon/best-friend", description = "Get all your pokemon or an individual " +
             "by calling them by name")
     @PostMapping("/getMyPokemon")
     public ResponseEntity<Object> getMyPokemon(@RequestHeader String authorization,
