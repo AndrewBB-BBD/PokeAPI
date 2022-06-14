@@ -1,10 +1,20 @@
 package com.pokedex.pokeAPI.repositories;
 
-import com.pokedex.pokeAPI.models.Pokemon;
+import com.pokedex.pokeAPI.models.data.PokemonData;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PokemonRepository extends JpaRepository<Pokemon, Long> {
+public interface PokemonRepository extends CrudRepository<PokemonData, Integer> {
+    List<PokemonData> findByidentifier(String identifier);
 
+
+    //@Query("SELECT p FROM pokemon p WHERE LOWER(p.identifier) = LOWER(:identifier)")
+    //PokemonData test(@Param("identifier") String identifier);
 }
