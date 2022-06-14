@@ -2,9 +2,15 @@ package com.pokedex.pokeAPI.controllers;
 import com.pokedex.pokeAPI.models.Pokemon;
 import com.pokedex.pokeAPI.models.data.PokemonData;
 import com.pokedex.pokeAPI.models.data.PokemonSpeciesData;
+import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 import com.pokedex.pokeAPI.repositories.PokemonRepository;
 import com.pokedex.pokeAPI.repositories.PokemonSpeciesRepository;
 import com.pokedex.pokeAPI.security.JwtUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +45,25 @@ public class PokemonController {
     @Autowired
     PokemonSpeciesRepository pokemonSpeciesRepository;
 
+    @Operation(
+            summary = "Create a new pokemon",
+            description = "Create a new pokemon",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully create a new pokemon",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = PokemonData.class)
+                                    )
+                            }
+                    ),
+                    @ApiResponse(responseCode  = "401", description  = "You are not authorized to create pokemon"),
+                    @ApiResponse(responseCode  = "403", description  = "Accessing this endpoint is forbidden"),
+                    @ApiResponse(responseCode  = "404", description  = "This pokemon was not created")
+            }
+    )
     @PostMapping()
     public PokemonData createPokemon(@RequestBody PokemonUpdateModel pokemon) {
         PokemonSpeciesData speciesData = pokemonSpeciesRepository
@@ -56,6 +81,25 @@ public class PokemonController {
         return pokemonRepository.save(pokemonData);
     }
 
+    @Operation(
+            summary = "Update an existing pokemon",
+            description = "Update an existing pokemon",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully updated an existing pokemon",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            schema = @Schema(implementation = PokemonData.class)
+                                    )
+                            }
+                    ),
+                    @ApiResponse(responseCode  = "401", description  = "You are not authorized to update a pokemon"),
+                    @ApiResponse(responseCode  = "403", description  = "Accessing this endpoint is forbidden"),
+                    @ApiResponse(responseCode  = "404", description  = "This pokemon was not updated")
+            }
+    )
     @PatchMapping()
     public PokemonData updatePokemon(@RequestBody PokemonUpdateModel pokemonDetails) throws ResourceNotFoundException {
         PokemonData pokemon = pokemonRepository
