@@ -17,6 +17,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
@@ -93,6 +97,19 @@ public class PublicController {
         return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "View a pokemon image based on their ID.",
+        description = "View a pokemon image based on their ID.",
+        responses = {
+                @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved pokemon image."
+                ),
+                @ApiResponse(responseCode  = "401", description  = "You are not authorized to view this pokemon image."),
+                @ApiResponse(responseCode  = "403", description  = "Accessing this pokemon image you were trying to reach is forbidden."),
+                @ApiResponse(responseCode  = "404", description  = "This pokemon was not found.")
+        }
+    )
     @GetMapping(value = "/image")
     public ResponseEntity<byte[]> getImageAsResponseEntity(@RequestParam int imageID) throws IOException {
     HttpHeaders headers = new HttpHeaders();
