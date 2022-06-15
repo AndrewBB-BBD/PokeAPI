@@ -11,13 +11,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .mvcMatchers(HttpMethod.GET, "v1/**", "/swagger-ui.html", "/swagger-ui.html/**",
+            .mvcMatchers(HttpMethod.GET, "/v1/login", "/v1/getToken", "/v3/**", "/swagger-ui/**","/swagger-ui.html", "/swagger-ui.html/**",
                     "/configuration/**", "/swagger-resources/**", "/v2/api-docs","/webjars/**").permitAll()
             .anyRequest()
             .authenticated()
             .and()
-            .oauth2ResourceServer()
-            .jwt();
+            .oauth2ResourceServer().jwt();
         return http.build();
     }
 }

@@ -11,29 +11,28 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pokedex.pokeAPI.lib.Traversing.BackwardContainer;
 import com.pokedex.pokeAPI.lib.Traversing.ForwardContainer;
 import com.pokedex.pokeAPI.lib.Traversing.IterateBackward;
 import com.pokedex.pokeAPI.lib.Traversing.IterateForward;
 
 import javax.persistence.Id;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.text.Collator;
+import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.extern.slf4j.Slf4j;
-
+import lombok.Data;
 @Data
+@Slf4j
 @Entity()
 @Table(name = "pokemon_species")
-@Slf4j
-public class PokemonSpeciesData implements ForwardContainer<List<PokemonSpeciesData>>, BackwardContainer<PokemonSpeciesData> {
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+public class PokemonSpeciesData implements ForwardContainer<List<PokemonSpeciesData>>, BackwardContainer<PokemonSpeciesData>, Serializable {
     @Id 
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
@@ -87,8 +86,16 @@ public class PokemonSpeciesData implements ForwardContainer<List<PokemonSpeciesD
                orphanRemoval = true,
                fetch = FetchType.LAZY,
                cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PokemonData> basePokemon;
 
+    public String toString() {
+        return "PokemonSpeciesData{" +
+                "identifier='" + identifier + '\'' +
+                '}';
+    }
+
+    @JsonIgnore
     @Override
     public IterateForward<List<PokemonSpeciesData>> get_forwardIterator() {
         return new IterateForward<List<PokemonSpeciesData>>() {
@@ -143,6 +150,7 @@ public class PokemonSpeciesData implements ForwardContainer<List<PokemonSpeciesD
         };
     }
 
+    @JsonIgnore
     @Override
     public IterateBackward<PokemonSpeciesData> get_backwardIterator() {
         return new IterateBackward<PokemonSpeciesData>() {
@@ -192,6 +200,4 @@ public class PokemonSpeciesData implements ForwardContainer<List<PokemonSpeciesD
             }
         };
     }
-
-    
 }

@@ -1,20 +1,16 @@
 package com.pokedex.pokeAPI.services;
 
 import com.pokedex.pokeAPI.repositories.PokemonRepository;
+import com.pokedex.pokeAPI.models.data.PokemonSpeciesData;
 import com.pokedex.pokeAPI.repositories.PokemonSpeciesRepository;
 import com.pokedex.pokeAPI.models.rest.response.ResponseEvolutionPokemon;
 
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Stream;
 import java.util.stream.IntStream;
 
-import com.pokedex.pokeAPI.models.data.PokemonSpeciesData;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.buffer.LimitedDataBufferList;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
