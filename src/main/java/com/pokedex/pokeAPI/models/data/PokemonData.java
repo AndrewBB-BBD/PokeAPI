@@ -8,6 +8,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +33,7 @@ public class PokemonData {
     @Column(nullable = false)
     private String identifier;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "species_id")
     private PokemonSpeciesData pokemon_species;
