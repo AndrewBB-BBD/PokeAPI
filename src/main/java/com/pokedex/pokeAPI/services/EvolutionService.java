@@ -40,9 +40,9 @@ public class EvolutionService {
         var forward = rootPokemonS.get_forwardIterator();
         List<List<PokemonSpeciesData>> chain = new ArrayList<>(); //DO NOT USE Arrays.toList() (1h)
         chain.add(forward.current());
-        do {
+        while (forward.hasNext()) {
             chain.add(forward.next());
-        } while (forward.hasNext());
+        }
 
         return IntStream.range(0, chain.size())
                         .mapToObj(i -> chain.get(i).stream()
