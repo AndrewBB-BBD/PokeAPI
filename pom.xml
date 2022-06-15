@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pokedex</groupId>
 	<artifactId>pokeAPI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>pokeAPI</name>
 	<description>Create an API to help Professor Oak create a pokedex</description>
 	<properties>

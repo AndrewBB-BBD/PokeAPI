@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/v1")
-public class PublicController {
+public class GeneralController {
     @Value("${auth0.application_id}")
     String applicationId;
 
